@@ -1,9 +1,27 @@
-import express, { request, response } from "express" ;
+import express from "express" ;
 import { PORT, mongoDBURL } from "./config.js";
 import mongoose from "mongoose";
-import { Book } from "./models/bookmodel.js";
+//import { Book } from "./models/bookModel.js";
+import booksRoute from './routes/booksRoute.js';
+import cors from 'cors';
+
+
 
 const app = express();
+
+//Middleware for handling CORS policy
+//option 1: Allow All origins with Default of cors(*)
+app.use(cors());
+
+//option2 : Allow custom origins
+
+app.use(
+    cors({
+        origin:'http://localhost:9012',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders:['Content-Type'],
+    })
+);
 
 //Middleware for parsing request body
 app.use(express.json());
@@ -13,113 +31,8 @@ app.get('/', (request,response) => {
     return response.status(234).send('Welcome to Book store')
 });
 
-//Route for save a new Book
-app.post('/books', async(request, response) => {
-    try {
-        if(
-            !request.body.title||
-            !request.body.author||
-            !request.body.publishYear
-        ) {
-            return response.status(400).send({
-                message: 'Send all required fields: title, author, publishYear',
-            });
-        }
-        const newBook = {
-            title: request.body.title,
-            author: request.body.title,
-            publishYear: request.body.publishYear,
-        };
+app.use('/books', booksRoute);
 
-        const book = await Book.create(newBook);
-
-        return response.status(201).send(book);
-    } catch (error) {
-        console.log(error.message);
-        response.status(500).send({message: error.message});
-    }
-});
-
-//Route for Get All Books from database
-app.get('/books', async (request,response) => {
-    try {
-        const books = await Book.find({});
-        return response.status(200).json({
-           count: books.length,
-          date:books
-        });
-       
-    } catch (error) {
-        console.log(error.message);
-        response.status(500).send({message: error.message});
-        }
-    });
-       
-   
-
-  //Route for Get All Books from database by id
-app.get('/books/:id', async (request,response) => {
-    try {
-
-        const {id} = request.params;
-
-        const books = await Book.findByID(id);
-
-        return response.status(200).json(book)
-    
-    } catch (error) {
-        console.log(error.message);
-        response.status(500).send({message: error.message});
-    }
-});
-
-//route for update a Book
-app.put('/books/:id', async (request, response) => {
-try {
-    if(
-        !request.body.title||
-         !request.body.author||
-          !request.body.publishYear
-
-    ) { 
-        return response.status(400).send ({
-        message: 'Send all required fields: title, author, publishYear',
-    });
-}
-const {id} = request.params;
-
-const result = await Book.findByIdAndUpdate(id,request.body);
-
-if(!result) {
-    return response.status(404).json({message: 'Book not found'});
-}
-
-return response.status(200).send({message: 'Book updated successfully'});
-
-}catch (error) {
-    console.log(error.message);
-    response.status(500).send({message:error.message});
-}
-
-});
-
-//Route for Delete a book
-app.delete('/books/:id', async(request, response) => {
-try {
-  const {id} = request.params;
-  const result = await Book.findIdAndDelete(id);
-  if(!result) {
-    return response.status (404).json ({ message:'Book not found' });
-  }
-
-  return response.status (200).send({message: 'Book deleted Successfully'});
-
-} catch (error) {
-    console.log(error.message);
-    response.status(500).send({message:error.message});
-}
-
-});
 
 
 mongoose 
