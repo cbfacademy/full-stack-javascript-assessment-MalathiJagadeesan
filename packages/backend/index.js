@@ -15,13 +15,13 @@ app.use(cors());
 
 //option2 : Allow custom origins
 
-app.use(
-    cors({
-        origin:'http://localhost:9012',
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        allowedHeaders:['Content-Type'],
-    })
-);
+//app.use(
+  //  cors({
+    //    origin:'http://localhost:9012',
+      //  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        //allowedHeaders:['Content-Type'],
+    //})
+//);
 
 //Middleware for parsing request body
 app.use(express.json());

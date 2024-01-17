@@ -19,7 +19,7 @@ router.post('/', async(request, response) => {
         }
         const newBook = {
             title: request.body.title,
-            author: request.body.title,
+            author: request.body.author,
             publishYear: request.body.publishYear,
         };
 
@@ -99,7 +99,7 @@ return response.status(200).send({message: 'Book updated successfully'});
 router.delete('/:id', async(request, response) => {
 try {
   const {id} = request.params;
-  const result = await Book.findIdAndDelete(id);
+  const result = await Book.findByIdAndDelete(id);
   if(!result) {
     return response.status (404).json ({ message:'Book not found' });
   }
