@@ -6,4 +6,4 @@ export const Spinners = () => {
   )
 }
 
-export default Spinner
+export default Spinners
