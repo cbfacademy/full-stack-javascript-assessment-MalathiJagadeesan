@@ -5,14 +5,14 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { message } from "antd";
 
-const DeleteBook = () => {
+const DeleteBook = (props) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const handleDeleteBook = () => {
     setLoading(true);
     axios
-      .delete(`http://localhost:9012/books/${id}`)
+      .delete(`${props.apiurl}/books/${id}`)
       .then(() => {
         setLoading(false);
         message.success("Book Deleted successfully");

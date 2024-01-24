@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { message } from "antd";
 
-const EditBook = () => {
+const EditBook = (props) => {
   const [title, setTitle] = useState("");
   const [author, setauthor] = useState("");
   const [publishYear, setpublishYear] = useState("");
@@ -16,7 +16,7 @@ const EditBook = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:9012/books/${id}`)
+      .get(`${props.apiurl}/books/${id}`)
       .then((response) => {
         console.log(response);
         setauthor(response?.data[0]?.author);

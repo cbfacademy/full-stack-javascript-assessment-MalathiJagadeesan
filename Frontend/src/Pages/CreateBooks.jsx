@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
 
-const CreateBooks = () => {
+const CreateBooks = (props) => {
   const [title, setTitle] = useState("");
   const [author, setauthor] = useState("");
   const [publishYear, setpublishYear] = useState("");
@@ -19,7 +19,7 @@ const CreateBooks = () => {
     };
     setLoading(true);
     axios
-      .post("http://localhost:9012/books", data)
+      .post(`${props.apiurl}/books`, data)
       .then(() => {
         setLoading(false);
         message.success("Book Created successfully");
